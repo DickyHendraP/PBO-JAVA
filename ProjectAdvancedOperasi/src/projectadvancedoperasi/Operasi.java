@@ -27,19 +27,19 @@ public class Operasi {
     }
     
     int kalikan (int a, int b){
-        return (a+b);
+        return (a*b);
     }
     
     int kalikan (int a, int b, int c){
-        return (a+b+c);
+        return (a*b*c);
     }
     
     double kalikan (double a, double b){
-        return (a+b);
+        return (a*b);
     }
     
     double kalikan (double a, double b, double c){
-        return (a+b+c);
+        return (a*b*c);
     }
     
 }
