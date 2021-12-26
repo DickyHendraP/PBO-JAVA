@@ -10,6 +10,10 @@ package datakaryawaninstansi;
  * @author dickypmngks
  */
 public interface Others {
-    int choice = 1;
-    public abstract void chooseSubMenu();
+    int umr = 30;
+    String golongan = "A";
+    
+    public abstract int crData();
+    public abstract int htngUmr();
+    public abstract void htngGaji();
 }
