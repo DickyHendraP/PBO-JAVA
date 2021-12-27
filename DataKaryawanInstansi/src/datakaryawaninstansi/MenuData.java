@@ -9,9 +9,10 @@ package datakaryawaninstansi;
  *
  * @author dickypmngks
  */
-public abstract class MenuData implements Others{
+public abstract class MenuData{
+    int memilih = 1;
     
-
+    //method
     public void mnUtm(){
         System.out.println("1. Tambah Data");
         System.out.println("2. Hapus Data");
@@ -19,4 +20,6 @@ public abstract class MenuData implements Others{
         System.out.println("4. Lihat Data");
         System.out.println("5. Exit");
     }
+    public abstract int pilihMnSkndr();
+    abstract void mnSkndr();
 }
