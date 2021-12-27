@@ -12,14 +12,15 @@ package datakaryawaninstansi;
 public abstract class MenuData{
     int memilih = 1;
     
-    //method
-    public void mnUtm(){
+    public void mnUtm(){    
         System.out.println("1. Tambah Data");
         System.out.println("2. Hapus Data");
         System.out.println("3. Cari Data");
         System.out.println("4. Lihat Data");
         System.out.println("5. Exit");
     }
-    public abstract int pilihMnSkndr();
+    
     abstract void mnSkndr();
+    
+    public abstract int pilihMnSkndr();
 }

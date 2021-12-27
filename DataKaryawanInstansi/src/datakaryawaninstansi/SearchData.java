@@ -13,6 +13,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,11 +27,18 @@ public class SearchData extends MenuData implements Others {
     
     int index = 0;
     
-    int jmlhAnk, gapok, tunjMnkh, tunjPgw, tunjAnk, gajiKtr;
-    double ptgnGaji, gajiBrsh;
-    String stts;
+    int umr, stts, jmlhAnk, gapok, tunjMnkh, tunjPgw, tunjAnk, gajiKtr;
     
-    public boolean cariData(ArrayList<ArrayList<String>> dataKaryawan) throws ParseException {
+    double ptgnGaji, gajiBrsh;
+    
+    String menikah, golongan;
+    
+    ArrayList<ArrayList<String>> dataKaryawan = new ArrayList<>();
+    
+    boolean ditemukan = false;
+
+    @Override
+    public int crData(ArrayList<ArrayList<String>> dataKaryawan) {
         System.out.print("Masukkan kode karyawan : ");
         String kodeKaryawan = input.nextLine();
         
@@ -37,18 +46,33 @@ public class SearchData extends MenuData implements Others {
             String dataKodeKaryawan = dataKaryawan.get(i).get(0);
             
             if(dataKodeKaryawan.equals(kodeKaryawan)){
-                boolean ditemukan = true;
+                ditemukan = true;
                 index = i;
             } else {
-                boolean ditemukan = false;
+                ditemukan = false;
             }
         }
-        return ditemukan;
+        return index;
     }
-    
-    public void gaji() {
-        
-        //gaji pokok
+
+    @Override
+    public int htngUmr(ArrayList<ArrayList<String>> dataKaryawan) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = formatter.parse(dataKaryawan.get(index).get(3));
+            LocalDate tanggal = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            
+            Period period = Period.between(tanggal, LocalDate.now());
+            umr = period.getYears();
+        } catch (ParseException ex) {
+            Logger.getLogger(SearchData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return umr;
+    }
+
+    @Override
+    public void htngGaji() {
+
         switch(golongan) {
             case "A" :
                 gapok = 5000000;
@@ -63,119 +87,88 @@ public class SearchData extends MenuData implements Others {
                 break;
         }
         
-        //tunjangan menikah
-        if(stts == "Sudah Menikah") {
+        if(stts == 0) {
             tunjMnkh = (gapok * 10) / 100;
         } else {
             tunjMnkh = 0;
         }
         
-        //tunjangan pegawai
         if(umr > 30) {
             tunjPgw = (gapok * 15) / 100;
         } else {
             tunjPgw = 0;
         }
         
-        //tunjangan anak
         if(jmlhAnk > 0) {
             tunjAnk = (gapok * 5 / 100) * jmlhAnk;
         } else {
             tunjAnk = 0;
         }
         
-        //gaji kotor
-        gapok = gapok + tunjMnkh + tunjPgw + tunjAnk;
+        gajiKtr = gapok + tunjMnkh + tunjPgw + tunjAnk;
         
-        //potongan
         ptgnGaji = (gapok * 2.5) / 100;
         
-        //gaji bersih
         gajiBrsh = gajiKtr - ptgnGaji;
     }
     
-    public void showData(ArrayList<ArrayList<String>> dataKaryawan, int index) throws ParseException {
-        
+    public void tmplData(ArrayList<ArrayList<String>> dataKaryawan, int index) {
+                
+        System.out.println(dataKaryawan.get(index).get(0));
         String kodeKaryawan = dataKaryawan.get(index).get(0);
         String namaKaryawan = dataKaryawan.get(index).get(1);
         golongan = dataKaryawan.get(index).get(4);
         
-        // mencari usia
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = formatter.parse(dataKaryawan.get(index).get(3));
-        LocalDate birthDay = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        stts = Integer.parseInt(dataKaryawan.get(index).get(5));
         
-        Period period = Period.between(birthDay, LocalDate.now());
-        umr = period.getYears();
-        
-        stts = dataKaryawan.get(index).get(5);
-        
-        if(stts == "Sudah Menikah") {
+        if(stts == 1) {
             jmlhAnk = Integer.parseInt(dataKaryawan.get(index).get(6));
+            menikah = "Sudah Menikah";
         } else {
             jmlhAnk = 0;
+            menikah = "Belum Menikah";
         }
         
-        //hitung gaji
-        gaji();
+        htngGaji();
+        int umur = htngUmr(dataKaryawan);
         
-        //tampilkan semua
-        System.out.println("\n================================");
-        System.out.println("    DATA PROFILE KARYAWAN");
-        System.out.println("--------------------------------");
-        System.out.println("Kode Karyawan : " + kodeKaryawan);
-        System.out.println("Nama Karyawan : " + namaKaryawan);
-        System.out.println("Golongan : " + golongan);
-        System.out.println("Usia : " + umr);
-        System.out.println("Status Menikah : " + stts);
-        System.out.println("Jumlah Anak : " + jmlhAnk);
+        System.out.println("\n===============================================");
+        System.out.println("             DATA PROFILE KARYAWAN             ");
+        System.out.println("-----------------------------------------------");
+        System.out.println("Kode Karyawan           : " + kodeKaryawan);
+        System.out.println("Nama Karyawan           : " + namaKaryawan);
+        System.out.println("Golongan                : " + this.golongan);
+        System.out.println("Usia                    : " + umur);
+        System.out.println("Status Menikah          : " + this.menikah);
+        System.out.println("\n");
+        System.out.println("Jumlah Anak             : " + this.jmlhAnk);
         
-        System.out.println("-------------------------------");
+        System.out.println("-----------------------------------------------");
         
-        System.out.println("Gaji Pokok : Rp. " + gapok);
-        System.out.println("Tunjangan Istri/Suami : Rp. " + tunjMnkh);
-        System.out.println("Tunjangan Pegawai : Rp. " + tunjPgw);
-        System.out.println("Tunjangan Anak : Rp. " + tunjAnk);
+        System.out.println("Gaji Pokok              : Rp. " + this.gapok);
+        System.out.println("Tunjangan Istri/Suami   : Rp. " + this.tunjMnkh);
+        System.out.println("Tunjangan Pegawai       : Rp. " + this.tunjPgw);
+        System.out.println("Tunjangan Anak          : Rp. " + this.tunjAnk);
         
-        System.out.println("-------------------------------");
+        System.out.println("----------------------------------------------- +");
         
-        System.out.println("Gaji Kotor : Rp. " + gapok);
-        System.out.println("Potongan : Rp. " + ptgnGaji);
+        System.out.println("Gaji Kotor              : Rp. " + this.gajiKtr);
+        System.out.println("Potongan                : Rp. " + this.ptgnGaji);
         
-        System.out.println("-------------------------------");
+        System.out.println("----------------------------------------------- -");
         
-        System.out.println("Gaji Bersih : Rp. " + gajiBrsh);
-    }
-
-    @Override
-    public int pilihMnSkndr() {
-        System.out.print("Menu Pilihan : ");
-        pilih = Integer.parseInt(input.nextLine());
-        return pilih;
+        System.out.println("Gaji Bersih             : Rp. " + this.gajiBrsh);
     }
 
     @Override
     void mnSkndr() {
         System.out.println("\n1. Kembali ke Menu Utama");
-        System.out.println("2. Tambah Data Kembali");
-    }
-
-    @Override
-    public int crData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int htngUmr() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void htngGaji() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void tmplData() {
-        
+    @Override
+    public int pilihMnSkndr() {
+        System.out.print("Menu Pilihan : ");
+        pilih = Integer.parseInt(input.nextLine());
+        return pilih;
     }
 }

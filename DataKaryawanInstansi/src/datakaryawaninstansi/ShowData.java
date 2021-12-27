@@ -13,6 +13,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,45 +22,53 @@ import java.util.Scanner;
  */
 public class ShowData extends MenuData{
     int pilih = memilih;
-    int usia;
+    int umr;
+    String menikah;
     Scanner input = new Scanner(System.in);
+
     
-    public void lihatData(ArrayList<ArrayList<String>> dataKaryawan) throws ParseException {
+    public void lhtData(ArrayList<ArrayList<String>> dataKaryawan) throws ParseException {
+        
         int i = 0;
-        String leftAlignFormat = "| %-10s | %-30s | %-5s | %-5s | %-15s | %-11s |%n";
+       String leftAlignFormat = "| %-10s | %-30s | %-5s | %-5s | %-15s | %-11s |%n";
         
         System.out.println("\n================================================================================================");
         System.out.println("                                   DATA KARYAWAN");
         System.out.println("------------------------------------------------------------------------------------------------");
-        System.out.printf(leftAlignFormat, "KODE KARY", "NAMA KARY", "GOL", "USIA", "STATUS NIKAH", "JUMLAH ANAK");
+        System.out.printf(leftAlignFormat, "KODE KARY", "NAMA KARY", "GOLONGAN", "USIA", "STATUS NIKAH", "JUMLAH ANAK");
         
         while(i < dataKaryawan.size()) {
             
-            // mencari usia
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date date = formatter.parse(dataKaryawan.get(i).get(3));
-            LocalDate birthDay = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate tanggal = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-            Period period = Period.between(birthDay, LocalDate.now());
-            usia = period.getYears();
+            Period period = Period.between(tanggal, LocalDate.now());
+            umr = period.getYears();
+            
+            if(Integer.parseInt(dataKaryawan.get(i).get(5)) == 1) {
+                menikah = "Sudah Menikah";
+            } else {
+                menikah = "Belum Menikah";
+            }
             
             if(dataKaryawan.get(i).size() == 7) {
-                System.out.format(leftAlignFormat,
+                System.out.format(leftAlignFormat,  
                         dataKaryawan.get(i).get(0),
                         dataKaryawan.get(i).get(1),
                         dataKaryawan.get(i).get(4),
-                        usia,
-                        dataKaryawan.get(i).get(5),
+                        umr,
+                        menikah,
                         dataKaryawan.get(i).get(6));
                 i++;
                 
             } else if (dataKaryawan.get(i).size() == 6) {
-                System.out.format(leftAlignFormat,
+                System.out.format(leftAlignFormat,  
                             dataKaryawan.get(i).get(0),
                             dataKaryawan.get(i).get(1),
                             dataKaryawan.get(i).get(4),
-                            usia,
-                            dataKaryawan.get(i).get(5),
+                            umr,
+                            menikah,
                             0);
                 i++;
             }

@@ -16,8 +16,9 @@ public class DelData extends MenuData{
     int pilih = memilih;
     Scanner input = new Scanner(System.in);
     
-    public void hapusData(ArrayList<ArrayList<String>> dataKaryawan) {
-        System.out.print("Kode Karyawan yang mau dihapus : ");
+    public void hpsData(ArrayList<ArrayList<String>> dataKaryawan) {
+        
+        System.out.print("Kode Karyawan yang mau dihapus     : ");
         String kdKary = input.nextLine();
         
         boolean ditemukan = false;
@@ -47,7 +48,7 @@ public class DelData extends MenuData{
     
     @Override
     public int pilihMnSkndr() {
-        System.out.print("Menu Pilihan : ");
+        System.out.print("Menu Pilihan                          : ");
         pilih = Integer.parseInt(input.nextLine());
         
         return pilih;

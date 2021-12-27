@@ -5,6 +5,8 @@
  */
 package datakaryawaninstansi;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author dickypmngks
@@ -13,7 +15,7 @@ public interface Others {
     int umr = 30;
     String golongan = "A";
     
-    public abstract int crData();
-    public abstract int htngUmr();
+    public abstract int crData(ArrayList<ArrayList<String>> dataKaryawan);
+    public abstract int htngUmr(ArrayList<ArrayList<String>> dataKaryawan);
     public abstract void htngGaji();
 }

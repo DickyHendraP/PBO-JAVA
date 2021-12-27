@@ -16,122 +16,143 @@ public class MainClass extends MenuData {
     /**
      * @param args the command line arguments
      */
+    Scanner input = new Scanner(System.in);
+    
     public static void main(String[] args) throws ParseException {
         
-        ArrayList<ArrayList<String> > dataKrywn = new ArrayList<>();
         Scanner input = new Scanner(System.in);
         
-        // object
+        ArrayList<ArrayList<String> > dataKrywn = new ArrayList<>();
+
         AddData add = new AddData();
         ShowData Show = new ShowData();
         DelData Del = new DelData();
         SearchData Search = new SearchData();
         
-        while(true) {
-            System.out.println("\n===============================================");
-            System.out.println("    MENU UTAMA PROGRAM PENDATAAN KARYAWAN");
-            System.out.println("===============================================");
+        while( true ){    
             add.mnUtm();
+            System.out.print("Menu pilihan                  : ");
+            int memilih = input.nextInt();
             
-            System.out.print("\nMenu pilihan : ");
-            int menuChoosen = Integer.parseInt(input.next());
-
-            switch(menuChoosen) {
-                
-                case 1:
-                OUTER:
-                while (true) {
-                    td.tambahData(dataKaryawan);
-                    td.subMenu();
-
-                    td.chooseSubMenu();
-                    switch (td.menuChoice) {
-                        case 1:
-                            break OUTER;
-                        case 2:
-                            continue;
-                        default:
-                            System.out.println("Pilihan Invalid, Menuju Ke Menu Utama");
-                            break OUTER;
-                    }
-                }
-                   break;
-               
-                case 2:
-                OUTER:
-                while (true) {
-                    hd.hapusData(dataKaryawan);
-                    hd.subMenu();
-
-                    hd.chooseSubMenu();
-                    switch (hd.menuChoice) {
-                        case 1:
-                            break OUTER;
-                        case 2:
-                            continue;
-                        default:
-                            System.out.println("Pilihan Invalid, Menuju Ke Menu Utama");
-                            break OUTER;
-                    }
-                }
-                    break;
-                    
-                case 3:
-                OUTER:
-                while (true) {
-                    boolean data = cd.cariData(dataKaryawan);
-                    if(data == false) {
-                        System.out.println("Data Karyawan Tidak Ditemukan");
+            switch(memilih){
+                case 1 : 
+                    boolean loop = true;
+                    while( loop ){
+                        System.out.println("");
+                        System.out.println("============================================================");
+                        System.out.println("                      Menu Tambah Data                      ");
+                        System.out.println("------------------------------------------------------------");                        
                         
-                        cd.subMenu();
-                        cd.chooseSubMenu();
-                    } else {
-                        cd.showData(dataKaryawan, cd.index);
+                        add.tmbhknData(dataKrywn);
+                        
+                        
+                        System.out.println("\n");
+                        System.out.println("Pilih Submenu   : ");
+                        add.mnSkndr();
+                        
+                        System.out.println("");
+                        add.pilihMnSkndr();
+                        
+                        if( add.pilih == 1 ){
+                            loop = false;
+                        }else if(add.pilih != 2) {
+                            System.out.println("pilihan sub menu tidak ada");
+                        }  
+                    }
+                    break;
+                
+                    
+                case 2 : 
+                    loop = true;
+                    while( loop ) {
+                        System.out.println("");
+                        System.out.println("============================================================");
+                        System.out.println("                         Hapus Data                         ");
+                        System.out.println("------------------------------------------------------------");
+                        String cb = input.nextLine();
+                       
+                        Del.hpsData(dataKrywn);
 
-                        cd.subMenu();
-                        cd.chooseSubMenu();
+                        //input submenu
+                        System.out.println("Pilih Submenu   : ");
+                        Del.mnSkndr();
+                        System.out.println("");
+                        Del.pilihMnSkndr();
+                        
+                        if( Del.pilih == 1 ){
+                            loop = false;
+                        } else if(Del.pilih != 2) {
+                            System.out.println("pilihan sub menu tidak ada");
+                        }
+                        
                     }
-                    switch (cd.menuChoice) {
-                        case 1:
-                            break OUTER;
-                        default:
-                            System.out.println("Pilihan Invalid, Menuju Ke Menu Utama");
-                            break OUTER;
+                    break;
+                
+                case 3 :                     
+                    loop = true;
+                    while( loop ){
+                        System.out.println("");
+                        System.out.println("============================================================");
+                        System.out.println("                         Cari Data                          ");
+                        System.out.println("------------------------------------------------------------");
+                        
+                        int i = Search.crData(dataKrywn);
+                        Search.tmplData(dataKrywn, 0);
+
+                        //input submenu
+                        System.out.println("");
+                        System.out.println("Pilih SubMenu   : ");
+                        Search.mnSkndr();
+                        
+                        System.out.println("");
+                        Search.pilihMnSkndr();
+                        
+                        if( Search.pilih == 1 ){
+                            loop = false;
+                        } else{
+                            System.out.println("pilihan sub menu tidak ada");
+                        }
                     }
-                }
+                    break;
+                
+                case 4 : 
+                    loop = true;
+                    while( loop ){
+
+                        Show.lhtData(dataKrywn);
+   
+                        System.out.println("\n");
+                        System.out.println("Pilih Submenu    : ");
+                        Show.mnSkndr();
+                        
+                        System.out.println("");
+                        Show.pilihMnSkndr();
+                        
+                        if( Show.pilih == 1 ){
+                            loop = false;
+                        }else{
+                            System.out.println("pilihan sub menu tidak ada");
+                        }
+                    }
                     break;
 
-                case 4:
-                OUTER:
-                while (true) {
-                    ld.lihatData(dataKaryawan);
-                    ld.subMenu();
-                    ld.chooseSubMenu();
-                    switch (ld.menuChoice) {
-                        case 1:
-                            break OUTER;
-                        default:
-                            System.out.println("Pilihan Invalid, Menuju Ke Menu Utama");
-                            break OUTER;
-                    }
-                }
-                    break;
-
-                case 5:
-                    System.out.println("\nProgram telah berhenti");
+                    
+                case 5 : 
                     System.exit(0);
-                    break;
-                default:
-                    System.out.println("Pilih menu yang tersedia :");
-                    break;
-            }
+                
+                default: 
+                    System.out.println("Menu yang anda pilih tidak ada dalam daftar");
+                    System.out.println("");
+                
+            }   
+            
         }
     }
 
     @Override
     public int pilihMnSkndr() {
-        System.out.print("Menu Pilihan : ");
-        pilih = Integer.parseInt(input.nextLine());
+        System.out.print("Menu Pilihan                          : ");
+        int pilih = Integer.parseInt(input.nextLine());
         
         return pilih;
     }
